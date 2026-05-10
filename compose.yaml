@@ -1,0 +1,25 @@
+﻿services:
+  ticketflow.api:
+    image: ticketflow.api
+    build:
+      context: .
+      dockerfile: TicketFlow.Api/Dockerfile
+
+  db:
+    image: mysql:latest
+    container_name: mysql_ticketflow
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: ticketflow_db
+      MYSQL_USER: ticketflow_user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    profiles:
+      - db
+      - deps
+
+volumes:
+  db_data:
