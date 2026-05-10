@@ -8,10 +8,14 @@ public static class ServiceExtensions
     public static IServiceCollection AddDatabaseConfiguration(this IServiceCollection services,
         IConfiguration configuration)
     {
-        var connnectionString = configuration.GetConnectionString("DefaultConnection");
-        var serverVersion = ServerVersion.AutoDetect(connnectionString);
-        
-        services.AddDbContext<AppDbContext>(options => options.UseMySql(connnectionString, serverVersion));
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            throw new Exception("Please set connection string in appsettings.json");
+        }
+
+        services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
         
         return services;
     }

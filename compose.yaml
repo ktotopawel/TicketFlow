@@ -4,19 +4,20 @@
     build:
       context: .
       dockerfile: TicketFlow.Api/Dockerfile
+    depends_on:
+      - db
 
   db:
-    image: mysql:latest
-    container_name: mysql_ticketflow
+    image: postgres:latest
+    container_name: postgres_ticketflow
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: ticketflow_db
-      MYSQL_USER: ticketflow_user
-      MYSQL_PASSWORD: password
+      POSTGRES_DB: ticketflow_db
+      POSTGRES_USER: ticketflow_user
+      POSTGRES_PASSWORD: password
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data:/var/lib/postgresql
     profiles:
       - db
       - deps
