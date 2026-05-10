@@ -1,0 +1,40 @@
+$kind: http-request
+method: POST
+url: '{{base_url}}/api/events'
+order: 3000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Taylor Swift World Tour",
+      "description": "Come see Taylor Swift in Poland. You Swiftie.",
+      "startDate": "2026-05-10T19:00:00.000Z",
+      "endDate": "2026-05-10T22:00:00.000Z",
+      "location": "Kraków Tauron Arena",
+      "availableTickets": 5000
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 201", () => {
+        pm.response.to.have.status(201);
+      });
+      
+      pm.test("Location header is present", () => {
+        pm.expect(pm.response.headers.has("Location")).to.eql(true);
+      });
+      
+      pm.test("Created event response has the expected fields", () => {
+        const body = pm.response.json();
+        pm.expect(body).to.have.property("id");
+        pm.expect(body).to.have.property("name", "Taylor Swift World Tour");
+        pm.expect(body).to.have.property("description", "Come see Taylor Swift in Poland. You Swiftie.");
+        pm.expect(body).to.have.property("location", "Kraków Tauron Arena");
+        pm.expect(body).to.have.property("availableTickets", 5000);
+        pm.expect(body).to.have.property("startDate");
+        pm.expect(body).to.have.property("endDate");
+      });

@@ -1,0 +1,30 @@
+$kind: http-request
+method: GET
+url: '{{base_url}}/api/events/:id'
+order: 2000
+pathVariables:
+  - key: id
+    value: '1'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", () => {
+        pm.response.to.have.status(200);
+      });
+      
+      pm.test("Response body is an object", () => {
+        const body = pm.response.json();
+        pm.expect(body).to.be.an("object");
+      });
+      
+      pm.test("Returned event has the expected fields", () => {
+        const body = pm.response.json();
+        pm.expect(body).to.have.property("id");
+        pm.expect(body).to.have.property("name");
+        pm.expect(body).to.have.property("description");
+        pm.expect(body).to.have.property("startDate");
+        pm.expect(body).to.have.property("endDate");
+        pm.expect(body).to.have.property("location");
+        pm.expect(body).to.have.property("availableTickets");
+      });
