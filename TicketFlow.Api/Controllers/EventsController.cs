@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using TicketFlow.Api.Data;
 using TicketFlow.Api.DTOs;
 using TicketFlow.Api.Entities;
+using TicketFlow.Api.Exceptions;
+using TicketFlow.Api.Extensions;
 
 namespace TicketFlow.Api.Controllers;
 
@@ -28,7 +30,7 @@ public class EventsController(AppDbContext db) : ControllerBase
             .Where(e => e.Id == id)
             .Select(e =>
                 new EventResponse(e.Id, e.Name, e.Description, e.StartDate, e.EndDate, e.Location, e.AvailableTickets))
-            .FirstOrDefaultAsync();
+            .FirstOrThrowAsync(new ResourceNotFoundException("event", id));
 
         return Ok(eventWithId);
     }
