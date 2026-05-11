@@ -24,11 +24,13 @@ public class GlobalExceptionHandler(
             Title = title,
             Type = GetProblemType(statusCode),
             Instance = httpContext.Request.Path,
-            Detail = GetSafeErrorMessage(exception, httpContext)
+            Detail = GetSafeErrorMessage(exception, httpContext),
+            Extensions =
+            {
+                ["traceId"] = httpContext.TraceIdentifier,
+                ["timestamp"] = DateTime.UtcNow
+            }
         };
-
-        problemDetails.Extensions["traceId"] = httpContext.TraceIdentifier;
-        problemDetails.Extensions["timestamp"] = DateTime.UtcNow;
 
         return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext
         {
@@ -40,8 +42,7 @@ public class GlobalExceptionHandler(
     private static (int StatusCode, string Ttile) MapException(Exception ex) => ex switch
     {
         AppException appEx => ((int)appEx.StatusCode, appEx.Message),
-        ArgumentNullException => (StatusCodes.Status400BadRequest, "Invalid argument."),
-        ArgumentException => (StatusCodes.Status400BadRequest, "Invalid argument."),
+        ArgumentNullException or ArgumentException => (StatusCodes.Status400BadRequest, "Invalid argument."),
         UnauthorizedAccessException => (StatusCodes.Status401Unauthorized, "Unathorized."),
         _ => (StatusCodes.Status500InternalServerError, "Unexpected error.")
     };
@@ -58,14 +59,12 @@ public class GlobalExceptionHandler(
 
     private static string? GetSafeErrorMessage(Exception exception, HttpContext context)
     {
-        // Only expose details in development
         var env = context.RequestServices.GetRequiredService<IHostEnvironment>();
         if (env.IsDevelopment())
         {
             return exception.Message;
         }
 
-        // In production, only expose messages from our own exceptions
         return exception is AppException ? exception.Message : null;
     }
 }

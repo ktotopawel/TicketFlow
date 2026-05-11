@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TicketFlow.Api.Data;
@@ -6,9 +7,10 @@ using TicketFlow.Api.Entities;
 using TicketFlow.Api.Exceptions;
 using TicketFlow.Api.Extensions;
 
-namespace TicketFlow.Api.Controllers;
+namespace TicketFlow.Api.Controllers.V1;
 
 [ApiController]
+[ApiVersion(1.0)]
 [Route("api/[controller]")]
 public class EventsController(AppDbContext db) : ControllerBase
 {
