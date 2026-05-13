@@ -16,7 +16,6 @@ public static class VersioningExtensions
                     new HeaderApiVersionReader("X-API-Version")
                 );
             })
-            .AddMvc()
             .AddApiExplorer(options =>
             {
                 options.GroupNameFormat = "'v'VVV";

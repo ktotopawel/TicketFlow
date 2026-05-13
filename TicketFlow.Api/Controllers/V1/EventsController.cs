@@ -6,20 +6,20 @@ using TicketFlow.Api.DTOs;
 using TicketFlow.Api.Entities;
 using TicketFlow.Api.Exceptions;
 using TicketFlow.Api.Extensions;
+using TicketFlow.Api.Mappers.V1;
 
 namespace TicketFlow.Api.Controllers.V1;
 
 [ApiController]
 [ApiVersion(1.0)]
-[Route("api/[controller]")]
-public class EventsController(AppDbContext db) : ControllerBase
+[Route("api/v{version:apiVersion}/[controller]")]
+public class EventsController(AppDbContext db, EventMapper mapper) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<EventResponse>>> GetAll()
     {
         var events = await db.Events
-            .Select(e =>
-                new EventResponse(e.Id, e.Name, e.Description, e.StartDate, e.EndDate, e.Location, e.AvailableTickets))
+            .Select(e => mapper.MapToResponse(e))
             .ToListAsync();
 
         return Ok(events);
@@ -30,8 +30,7 @@ public class EventsController(AppDbContext db) : ControllerBase
     {
         var eventWithId = await db.Events
             .Where(e => e.Id == id)
-            .Select(e =>
-                new EventResponse(e.Id, e.Name, e.Description, e.StartDate, e.EndDate, e.Location, e.AvailableTickets))
+            .Select(e => mapper.MapToResponse(e))
             .FirstOrThrowAsync(new ResourceNotFoundException("event", id));
 
         return Ok(eventWithId);
@@ -40,22 +39,13 @@ public class EventsController(AppDbContext db) : ControllerBase
     [HttpPost]
     public async Task<ActionResult<EventResponse>> Create(CreateEventRequest req)
     {
-        var newEvent = new Event
-        {
-            Name = req.Name,
-            Description = req.Description,
-            StartDate = req.StartDate,
-            EndDate = req.EndDate,
-            Location = req.Location,
-            AvailableTickets = req.AvailableTickets
-        };
+        var newEvent = mapper.MapToEntity(req);
 
         db.Events.Add(newEvent);
         await db.SaveChangesAsync();
 
-        var res = new EventResponse(newEvent.Id, newEvent.Name, newEvent.Description, newEvent.StartDate,
-            newEvent.EndDate, newEvent.Location, newEvent.AvailableTickets);
+        var res = mapper.MapToResponse(newEvent);
 
-        return CreatedAtAction(nameof(GetById), new { res.Id }, res);
+        return CreatedAtAction(nameof(GetById), new { version = "1.0", res.Id }, res);
     }
 }

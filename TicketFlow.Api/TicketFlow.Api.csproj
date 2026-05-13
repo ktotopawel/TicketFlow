@@ -16,6 +16,7 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
+        <PackageReference Include="Riok.Mapperly" Version="4.3.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
     </ItemGroup>
     
@@ -23,10 +24,6 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
-    </ItemGroup>
-    
-    <ItemGroup>
-      <Folder Include="Controllers\V2\" />
     </ItemGroup>
 
 </Project>

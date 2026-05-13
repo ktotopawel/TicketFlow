@@ -11,7 +11,7 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddApiVersioning();
+        builder.Services.AddVersioningConfiguration();
         builder.Services.AddControllers();
         builder.Services.AddRouting(options => options.LowercaseUrls = true);
         builder.Services.AddEndpointsApiExplorer();
