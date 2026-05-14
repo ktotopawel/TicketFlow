@@ -1,33 +1,13 @@
 $kind: http-request
 method: GET
-url: '{{base_url}}/api/v1/events'
-order: 1000
+url: '{{base_url}}/api/v2/events'
+order: 1100
+query:
+  - key: page
+    value: '1'
+  - key: pageSize
+    value: '10'
 scripts:
-  - type: afterResponse
-    language: text/javascript
-    code: |-
-      pm.test("Status code is 200", () => {
-        pm.response.to.have.status(200);
-      });
-      
-      pm.test("Response body is an array", () => {
-        const body = pm.response.json();
-        pm.expect(body).to.be.an("array");
-      });
-      
-      pm.test("Each event has the expected shape", () => {
-        const body = pm.response.json();
-        body.forEach((event) => {
-          pm.expect(event).to.have.property("id");
-          pm.expect(event).to.have.property("name");
-          pm.expect(event).to.have.property("description");
-          pm.expect(event).to.have.property("startDate");
-          pm.expect(event).to.have.property("endDate");
-          pm.expect(event).to.have.property("location");
-          pm.expect(event).to.have.property("availableTickets");
-        });
-      });
-
   - type: afterResponse
     language: text/javascript
     code: |-
@@ -44,7 +24,7 @@ scripts:
         pm.expect(body).to.have.property("links");
       });
 
-      pm.test("Each v2 event has the expected shape", () => {
+      pm.test("Each event has the expected shape", () => {
         const body = pm.response.json();
         body.items.forEach((event) => {
           pm.expect(event).to.have.property("id");

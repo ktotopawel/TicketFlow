@@ -12,7 +12,7 @@ using TicketFlow.Api.Mappers.V2;
 namespace TicketFlow.Api.Controllers.V2;
 
 [ApiController]
-[ApiVersion(2.0)]
+[ApiVersion("2.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
 public class EventsController(AppDbContext db, EventMapper mapper) : ControllerBase
 {

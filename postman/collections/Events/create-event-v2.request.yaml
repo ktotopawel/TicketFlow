@@ -1,7 +1,7 @@
 $kind: http-request
 method: POST
-url: '{{base_url}}/api/v1/events'
-order: 3000
+url: '{{base_url}}/api/v2/events'
+order: 3100
 headers:
   - key: Content-Type
     value: application/json
