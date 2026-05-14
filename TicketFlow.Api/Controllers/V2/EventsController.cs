@@ -1,10 +1,9 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using TicketFlow.Api.Data;
-using TicketFlow.Api.DTOs;
 using TicketFlow.Api.DTOs.V2;
-using TicketFlow.Api.Entities;
 using TicketFlow.Api.Exceptions;
 using TicketFlow.Api.Extensions;
 using TicketFlow.Api.Mappers.V2;
@@ -17,15 +16,15 @@ namespace TicketFlow.Api.Controllers.V2;
 public class EventsController(AppDbContext db, EventMapper mapper) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<EventListResponse>> GetAll(
-        [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 10
-    )
+    public async Task<ActionResult<EventListResponse>> GetAll([FromQuery] PaginationQuery req)
     {
+        var page = req.Page;
+        var pageSize = req.PageSize;
+        
         var query = db.Events;
 
-        int totalCount = await query.CountAsync();
-        int totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+        var totalCount = await query.CountAsync();
+        var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
 
         var events = await db.Events
             .OrderBy(e => e.CreatedAt)
