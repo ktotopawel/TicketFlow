@@ -12,8 +12,7 @@ public static class VersioningExtensions
                 options.AssumeDefaultVersionWhenUnspecified = true;
                 options.ReportApiVersions = true;
                 options.ApiVersionReader = ApiVersionReader.Combine(
-                    new UrlSegmentApiVersionReader(),
-                    new HeaderApiVersionReader("X-API-Version")
+                    new UrlSegmentApiVersionReader()
                 );
             })
             .AddApiExplorer(options =>

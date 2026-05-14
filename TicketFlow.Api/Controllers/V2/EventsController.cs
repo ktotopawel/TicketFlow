@@ -43,7 +43,7 @@ public class EventsController(AppDbContext db, EventMapper mapper) : ControllerB
         );
 
         var metadata = new PaginationMetadata(page, pageSize, totalPages, totalCount);
-        
+
         var res = new EventListResponse(events, metadata, links);
 
         return Ok(res);
@@ -68,9 +68,8 @@ public class EventsController(AppDbContext db, EventMapper mapper) : ControllerB
         db.Events.Add(newEvent);
         await db.SaveChangesAsync();
 
-        var res = new EventResponse(newEvent.Id, newEvent.Name, newEvent.Description, newEvent.StartDate,
-            newEvent.EndDate, newEvent.Location, newEvent.AvailableTickets);
+        var res = mapper.MapToResponse(newEvent);
 
-        return CreatedAtAction(nameof(GetById), new { res.Id }, res);
+        return CreatedAtAction(nameof(GetById), new { version = "2.0"  ,res.Id }, res);
     }
 }
