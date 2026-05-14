@@ -1,9 +1,9 @@
 using Riok.Mapperly.Abstractions;
 using TicketFlow.Api.DTOs;
-using TicketFlow.Api.DTOs.V1;
+using TicketFlow.Api.DTOs.V2;
 using TicketFlow.Api.Entities;
 
-namespace TicketFlow.Api.Mappers.V1;
+namespace TicketFlow.Api.Mappers.V2;
 
 [Mapper]
 public partial class EventMapper

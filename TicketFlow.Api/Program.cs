@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using TicketFlow.Api.Data;
 using TicketFlow.Api.Extensions;
 using TicketFlow.Api.Middleware;
+using V1 = TicketFlow.Api.Mappers.V1;
+using V2 = TicketFlow.Api.Mappers.V2;
 
 namespace TicketFlow.Api;
 
@@ -19,6 +21,8 @@ public class Program
         builder.Services.AddProblemDetails();
         builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
         builder.Services.AddSwaggerConfiguration();
+        builder.Services.AddSingleton<V1.EventMapper>();
+        builder.Services.AddSingleton<V2.EventMapper>();
 
         var app = builder.Build();
 

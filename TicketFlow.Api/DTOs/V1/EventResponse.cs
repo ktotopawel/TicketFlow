@@ -1,4 +1,4 @@
-namespace TicketFlow.Api.DTOs;
+namespace TicketFlow.Api.DTOs.V1;
 
 public record EventResponse(
     int Id,

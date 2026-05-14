@@ -9,4 +9,5 @@ public record Event
     public required DateTime EndDate { get; set; }
     public required string Location { get; set; }
     public required int AvailableTickets { get; set; }
+    public required DateTime CreatedAt { get; set; }
 }

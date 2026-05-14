@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TicketFlow.Api.Data;
 using TicketFlow.Api.DTOs;
+using TicketFlow.Api.DTOs.V1;
 using TicketFlow.Api.Entities;
 using TicketFlow.Api.Exceptions;
 using TicketFlow.Api.Extensions;
@@ -39,7 +40,7 @@ public class EventsController(AppDbContext db, EventMapper mapper) : ControllerB
     [HttpPost]
     public async Task<ActionResult<EventResponse>> Create(CreateEventRequest req)
     {
-        var newEvent = mapper.MapToEntity(req);
+        var newEvent = mapper.MapToEntity(req, DateTime.UtcNow);
 
         db.Events.Add(newEvent);
         await db.SaveChangesAsync();
