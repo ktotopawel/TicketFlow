@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using TicketFlow.Api.Data;
 using TicketFlow.Api.DTOs;
@@ -12,8 +13,9 @@ using TicketFlow.Api.Mappers.V1;
 namespace TicketFlow.Api.Controllers.V1;
 
 [ApiController]
-[ApiVersion("1.0")]
+[ApiVersion("1.0", Deprecated = true)]
 [Route("api/v{version:apiVersion}/[controller]")]
+[EnableRateLimiting("DeprecatedAPIPolicy")]
 public class EventsController(AppDbContext db, EventMapper mapper) : ControllerBase
 {
     [HttpGet]

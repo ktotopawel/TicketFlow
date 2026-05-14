@@ -23,6 +23,7 @@ public class Program
         builder.Services.AddSwaggerConfiguration();
         builder.Services.AddSingleton<V1.EventMapper>();
         builder.Services.AddSingleton<V2.EventMapper>();
+        builder.Services.AddRateLimitingConfiguration();
 
         var app = builder.Build();
 
@@ -34,6 +35,8 @@ public class Program
         app.UseExceptionHandler("/error");
 
         app.UseHttpsRedirection();
+
+        app.UseRateLimiter();
 
         app.MapControllers();
 
