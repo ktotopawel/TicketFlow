@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using TicketFlow.Api.Data;
 using TicketFlow.Api.DTOs.V2;
+using TicketFlow.Api.Entities;
 using TicketFlow.Api.Exceptions;
 using TicketFlow.Api.Extensions;
 using TicketFlow.Api.Mappers.V2;
@@ -18,7 +19,7 @@ namespace TicketFlow.Api.Controllers.V2;
 public class EventsController(AppDbContext db, EventMapper mapper) : ControllerBase
 {
     [HttpGet]
-    [AllowAnonymous]
+    [Authorize(Roles = nameof(Role.User))]
     public async Task<ActionResult<EventListResponse>> GetAll([FromQuery] PaginationQuery req)
     {
         var page = req.Page;
@@ -52,7 +53,7 @@ public class EventsController(AppDbContext db, EventMapper mapper) : ControllerB
     }
 
     [HttpGet("{id}")]
-    [AllowAnonymous]
+    [Authorize(Roles = nameof(Role.User))]
     public async Task<ActionResult<EventResponse>> GetById(int id)
     {
         var eventWithId = await db.Events
@@ -64,6 +65,7 @@ public class EventsController(AppDbContext db, EventMapper mapper) : ControllerB
     }
 
     [HttpPost]
+    [Authorize(Roles = nameof(Role.Admin))]
     public async Task<ActionResult<EventResponse>> Create(CreateEventRequest req)
     {
         var newEvent = mapper.MapToEntity(req, DateTime.UtcNow);

@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TicketFlow.Api.Data;
@@ -12,6 +13,7 @@ namespace TicketFlow.Api.Controllers.Common;
 [ApiController]
 [Route("/api/auth")]
 [ApiVersionNeutral]
+[AllowAnonymous]
 public class AuthenticationController(AuthService service) : ControllerBase
 {
     [HttpPost("register")]

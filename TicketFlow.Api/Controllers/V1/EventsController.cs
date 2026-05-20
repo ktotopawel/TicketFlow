@@ -20,7 +20,7 @@ namespace TicketFlow.Api.Controllers.V1;
 public class EventsController(AppDbContext db, EventMapper mapper) : ControllerBase
 {
     [HttpGet]
-    [AllowAnonymous]
+    [Authorize(Roles = nameof(Role.User))]
     public async Task<ActionResult<IEnumerable<EventResponse>>> GetAll()
     {
         var events = await db.Events
@@ -31,7 +31,7 @@ public class EventsController(AppDbContext db, EventMapper mapper) : ControllerB
     }
 
     [HttpGet("{id}")]
-    [AllowAnonymous]
+    [Authorize(Roles = nameof(Role.User))]
     public async Task<ActionResult<EventResponse>> GetById(int id)
     {
         var eventWithId = await db.Events
@@ -43,6 +43,7 @@ public class EventsController(AppDbContext db, EventMapper mapper) : ControllerB
     }
 
     [HttpPost]
+    [Authorize(Roles = nameof(Role.Admin))]
     public async Task<ActionResult<EventResponse>> Create(CreateEventRequest req)
     {
         var newEvent = mapper.MapToEntity(req, DateTime.UtcNow);
