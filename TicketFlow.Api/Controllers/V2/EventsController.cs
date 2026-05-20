@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.RateLimiting;
@@ -17,6 +18,7 @@ namespace TicketFlow.Api.Controllers.V2;
 public class EventsController(AppDbContext db, EventMapper mapper) : ControllerBase
 {
     [HttpGet]
+    [AllowAnonymous]
     public async Task<ActionResult<EventListResponse>> GetAll([FromQuery] PaginationQuery req)
     {
         var page = req.Page;
@@ -50,6 +52,7 @@ public class EventsController(AppDbContext db, EventMapper mapper) : ControllerB
     }
 
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<ActionResult<EventResponse>> GetById(int id)
     {
         var eventWithId = await db.Events

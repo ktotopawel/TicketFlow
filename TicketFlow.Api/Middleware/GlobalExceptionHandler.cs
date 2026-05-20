@@ -39,11 +39,11 @@ public class GlobalExceptionHandler(
         });
     }
 
-    private static (int StatusCode, string Ttile) MapException(Exception ex) => ex switch
+    private static (int StatusCode, string Title) MapException(Exception ex) => ex switch
     {
         AppException appEx => ((int)appEx.StatusCode, appEx.Message),
         ArgumentNullException or ArgumentException => (StatusCodes.Status400BadRequest, "Invalid argument."),
-        UnauthorizedAccessException => (StatusCodes.Status401Unauthorized, "Unathorized."),
+        UnauthorizedAccessException => (StatusCodes.Status401Unauthorized, "Unauthorized."),
         _ => (StatusCodes.Status500InternalServerError, "Unexpected error.")
     };
 
